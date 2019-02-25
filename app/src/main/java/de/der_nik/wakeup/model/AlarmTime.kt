@@ -7,7 +7,8 @@ import java.util.*
 
 @Entity(tableName = "alarm_table")
 data class AlarmTime(
-    @PrimaryKey val id: String,
     var date: Long,
     var name: String,
-    var active: Boolean)
+    var active: Boolean) {
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+}

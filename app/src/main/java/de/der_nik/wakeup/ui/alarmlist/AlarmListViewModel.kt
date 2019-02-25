@@ -50,16 +50,15 @@ class AlarmListViewModel(application: Application) : AndroidViewModel(applicatio
             val context = getApplication<Application>()
             Toast.makeText(getApplication(), "Clicked: ${alarm.name}", Toast.LENGTH_LONG).show()
             val intent = Intent( context, EditAddAlarmActivity::class.java)
-            intent.putExtra("uuid", alarm.id)
+            intent.putExtra("id", alarm.id)
             context.startActivity(intent)
         }
 
         fun ontoggleActiveSwitch(alarm: AlarmTime){
             val alarmLD = MutableLiveData<AlarmTime>()
             alarmLD.value = alarm
-            alarmLD.value!!.active = !alarmLD.value!!.active
-            if(alarmLD.value!!.active){
-                AlarmClockManager.getInstance().activateIntent(getApplication(), alarmLD)
+            if(!alarmLD.value!!.active){
+                AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD)
             } else {
                 AlarmClockManager.getInstance().deactivateAlarm(getApplication(), alarmLD)
             }

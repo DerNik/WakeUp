@@ -14,7 +14,7 @@ class WakeUpRepository(private val wakeUpDao: WakeUpDao) {
     }
 
     @WorkerThread
-    fun getAlarmByID(uuid: String): AlarmTime {
-        return wakeUpDao.getAlarmByID(uuid)
+    fun getAlarmByID(id: Int): AlarmTime {
+        return wakeUpDao.getAlarmByID(id)
     }
 }

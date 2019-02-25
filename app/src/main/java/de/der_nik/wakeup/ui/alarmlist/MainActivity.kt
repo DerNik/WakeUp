@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             val intent = Intent( this@MainActivity, EditAddAlarmActivity::class.java)
-            intent.putExtra("uuid", "")
+            intent.putExtra("id", 0)
             startActivity(intent)
         }
     }

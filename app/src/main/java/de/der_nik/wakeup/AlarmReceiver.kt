@@ -11,7 +11,7 @@ class AlarmReceiver: BroadcastReceiver() {
 
         AlarmClockManager.getInstance().startAlarm(context!!)
         val activityIntent = Intent(context, AlarmClockActivity::class.java)
-        activityIntent.putExtra("id", intent?.getStringExtra("id"))
-        context!!.startActivity(activityIntent)
+        activityIntent.putExtra("id", intent?.getIntExtra("id", 0))
+        context.startActivity(activityIntent)
     }
 }

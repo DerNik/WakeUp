@@ -9,17 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import de.der_nik.wakeup.R
 import de.der_nik.wakeup.model.AlarmTime
+import de.der_nik.wakeup.util.AlarmClockManager
 import kotlinx.android.synthetic.main.edit_add_alarm_fragment.*
 import java.util.*
 
 class EditAddAlarmFragment : Fragment() {
 
     companion object {
-        fun newInstance() = EditAddAlarmFragment()
+        fun newInstance(id: Int): EditAddAlarmFragment{
+            val args = Bundle()
+            args.putInt("id", id)
+            val fragment =EditAddAlarmFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private lateinit var viewModel: EditAddAlarmViewModel
-    private var uuid: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +37,7 @@ class EditAddAlarmFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(EditAddAlarmViewModel::class.java)
-        viewModel.handleReceivedUUID(this.uuid)
+        viewModel.handleReceivedID(arguments?.getInt("id") ?: 0)
         picker_time.setIs24HourView(true)
         val alarmObserver = Observer<AlarmTime> {alarm ->
             edit_name.setText(alarm?.name ?: "")
@@ -45,18 +51,12 @@ class EditAddAlarmFragment : Fragment() {
         viewModel.alarmLD.observe(this, alarmObserver)
 
         button_save.setOnClickListener{
-            val setDate = viewModel.setDate(picker_time.currentHour, picker_time.currentMinute)
+            val setDate = AlarmClockManager.getInstance().setDate(picker_time.currentHour, picker_time.currentMinute)
             if(viewModel.createActivateAndSafeAlarm(setDate, edit_name.text.toString())) {
                 activity?.finish()
             } else {
                 // error handling
             }
-
         }
     }
-
-    fun setUuid(uuid: String?) {
-        this.uuid = uuid
-    }
-
 }

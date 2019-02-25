@@ -11,12 +11,13 @@ class EditAddAlarmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_add_alarm_activity)
         if (savedInstanceState == null) {
-            val editAddAlarmFragment = EditAddAlarmFragment.newInstance()
+            val id = intent.getIntExtra("id", 0)
+            val editAddAlarmFragment = EditAddAlarmFragment.newInstance(id)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, editAddAlarmFragment)
                 .commitNow()
 
-            editAddAlarmFragment.setUuid(intent.getStringExtra("uuid"))
+
         }
     }
 }

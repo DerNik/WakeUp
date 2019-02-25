@@ -28,8 +28,8 @@ class AlarmClockViewModel (application: Application) : AndroidViewModel(applicat
         repository = WakeUpRepository(wakeUpDao)
     }
 
-    fun loadAlarm(uuid: String)  = scope.launch(Dispatchers.IO) {
-        alarm.postValue(repository.getAlarmByID(uuid))
+    fun loadAlarm(id: Int)  = scope.launch(Dispatchers.IO) {
+        alarm.postValue(repository.getAlarmByID(id))
     }
 
     fun stopAlarm(): Boolean {
