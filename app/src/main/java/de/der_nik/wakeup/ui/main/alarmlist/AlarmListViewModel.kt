@@ -1,4 +1,4 @@
-package de.der_nik.wakeup.ui.alarmlist
+package de.der_nik.wakeup.ui.main.alarmlist
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

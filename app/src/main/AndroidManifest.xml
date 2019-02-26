@@ -15,7 +15,7 @@
         </activity>
         <activity android:name=".ui.editaddalarm.EditAddAlarmActivity">
         </activity>
-        <activity android:name=".ui.alarmlist.MainActivity">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

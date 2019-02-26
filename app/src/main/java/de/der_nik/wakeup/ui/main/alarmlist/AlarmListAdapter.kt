@@ -1,4 +1,4 @@
-package de.der_nik.wakeup.ui.alarmlist
+package de.der_nik.wakeup.ui.main.alarmlist
 
 import android.arch.lifecycle.*
 import android.support.v7.widget.RecyclerView
