@@ -40,9 +40,8 @@ class AlarmClockFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         btn_stop.setOnClickListener {
-            if(viewModel.stopAlarm()){
-                activity?.finish()
-            }
+            viewModel.stopAlarm()
+            activity?.finish()
         }
     }
 }

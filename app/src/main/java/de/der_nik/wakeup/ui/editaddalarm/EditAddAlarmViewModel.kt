@@ -31,12 +31,23 @@ class EditAddAlarmViewModel(application: Application) : AndroidViewModel(applica
         repository = WakeUpRepository(wakeUpDao)
     }
 
-    fun createActivateAndSafeAlarm(setDate:  Long, info: String): Boolean {
-        val newAlarm = AlarmTime(setDate, info, false)
+    fun createActivateAndSafeAlarm(hour: Int, minute: Int, mo: Boolean, di: Boolean,
+                                   mi: Boolean, don: Boolean, fr: Boolean, sa: Boolean, so: Boolean, info: String): Boolean {
+        val newAlarm = AlarmTime(0, info, false)
+        newAlarm.mo = mo
+        newAlarm.di = di
+        newAlarm.mi = mi
+        newAlarm.don = don
+        newAlarm.fr = fr
+        newAlarm.sa = sa
+        newAlarm.so = so
+
+        val date = AlarmClockManager.getInstance().setDate(hour, minute, newAlarm)
+
+        newAlarm.date = date
+
         if(this.id != 0) {
             newAlarm.id = this.id
-        }
-        if(alarmLD.value == null) {
         }
         alarmLD.setValue(newAlarm)
         if (AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD)) {

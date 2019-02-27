@@ -9,7 +9,6 @@ import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.util.Log
-import com.github.debop.javatimes.toDateTime
 import de.der_nik.wakeup.AlarmReceiver
 import de.der_nik.wakeup.model.AlarmTime
 import java.util.*
@@ -27,7 +26,7 @@ class AlarmClockManager {
         if(dateToSet <= now){
             var hour = dateToSet.hours
             var min = dateToSet.minutes
-            alarm.value!!.date = setDate(hour, min)
+            alarm.value!!.date = setDate(hour, min, alarm.value!!)
         }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = getPendingIntent(context, alarm)
@@ -55,7 +54,8 @@ class AlarmClockManager {
         alarmIntent.putExtra("id", id)
         return PendingIntent.getBroadcast(context, id, alarmIntent, 0)
     }
-    fun setDate(hour: Int, minute: Int): Long {
+    fun setDate(hour: Int, minute: Int, alarm: AlarmTime): Long {
+        val weekDays: List<Int> = getWeekList(alarm)
         val cal = Calendar.getInstance() // locale-specific
         cal.time = Date()
         val curTime = cal.timeInMillis
@@ -67,7 +67,24 @@ class AlarmClockManager {
         if (curTime > timeToSet){
             cal.add(Calendar.DATE, 1)
         }
+        while(weekDays.isNotEmpty() && !weekDays.contains(cal.get(Calendar.DAY_OF_WEEK))){
+            cal.add(Calendar.DATE, 1)
+        }
         return cal.timeInMillis
+    }
+
+    private fun getWeekList(alarm: AlarmTime): List<Int>{
+        val list: MutableList<Int> = mutableListOf()
+        if(alarm.mo) list.add(Calendar.MONDAY)
+        if(alarm.di) list.add(Calendar.TUESDAY)
+        if(alarm.mi) list.add(Calendar.WEDNESDAY)
+        if(alarm.don) list.add(Calendar.THURSDAY)
+        if(alarm.fr) list.add(Calendar.FRIDAY)
+        if(alarm.sa) list.add(Calendar.SATURDAY)
+        if(alarm.so) list.add(Calendar.SUNDAY)
+        return list
+
+
     }
 
 

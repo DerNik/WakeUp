@@ -47,12 +47,29 @@ class EditAddAlarmFragment : Fragment() {
             val minutes = cal.get(Calendar.MINUTE)
             picker_time.currentHour = hours
             picker_time.currentMinute = minutes
+
+            day_of_week_mo.isChecked = alarm?.mo ?: false
+            day_of_week_di.isChecked = alarm?.di ?: false
+            day_of_week_mi.isChecked = alarm?.mi ?: false
+            day_of_week_do.isChecked = alarm?.don ?: false
+            day_of_week_fr.isChecked = alarm?.fr ?: false
+            day_of_week_sa.isChecked = alarm?.sa ?: false
+            day_of_week_so.isChecked = alarm?.so ?: false
         }
         viewModel.alarmLD.observe(this, alarmObserver)
 
         button_save.setOnClickListener{
-            val setDate = AlarmClockManager.getInstance().setDate(picker_time.currentHour, picker_time.currentMinute)
-            if(viewModel.createActivateAndSafeAlarm(setDate, edit_name.text.toString())) {
+            if(viewModel.createActivateAndSafeAlarm(
+                    picker_time.currentHour,
+                    picker_time.currentMinute,
+                    day_of_week_mo.isChecked,
+                    day_of_week_di.isChecked,
+                    day_of_week_mi.isChecked,
+                    day_of_week_do.isChecked,
+                    day_of_week_fr.isChecked,
+                    day_of_week_sa.isChecked,
+                    day_of_week_so.isChecked,
+                    edit_name.text.toString())) {
                 activity?.finish()
             } else {
                 // error handling
