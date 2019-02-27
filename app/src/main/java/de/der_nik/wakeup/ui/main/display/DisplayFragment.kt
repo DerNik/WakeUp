@@ -30,12 +30,11 @@ class DisplayFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DisplayViewModel::class.java)
-        var i = 0
         viewModel.startCountdown()
         viewModel.allAlarms.observe(this, Observer { alarms -> viewModel.startCountdown() })
         viewModel.timer.observe(this, Observer { countdown ->
             tv_alarm_time.text = viewModel.getAlarmTime()
-            tv_alarm_to_go.text = countdown ?: "$i++"})
+            tv_alarm_to_go.text = countdown ?: ""})
 
     }
 

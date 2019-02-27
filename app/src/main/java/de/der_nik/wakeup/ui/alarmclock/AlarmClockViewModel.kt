@@ -2,6 +2,7 @@ package de.der_nik.wakeup.ui.alarmclock
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import de.der_nik.wakeup.WakeUpRepository
 import de.der_nik.wakeup.model.AlarmTime
@@ -35,7 +36,15 @@ class AlarmClockViewModel (application: Application) : AndroidViewModel(applicat
     fun stopAlarm(): Boolean {
         val context = getApplication<Application>()
         AlarmClockManager.getInstance().stopAlarm(context)
-        return AlarmClockManager.getInstance().deactivateAlarm(context,alarm)
+        if(AlarmClockManager.getInstance().deactivateAlarm(context,alarm)) {
+            saveAlarm(alarm)
+            return true
+        }
+        return false
+    }
+
+    fun saveAlarm(alarm: LiveData<AlarmTime>) = scope.launch(Dispatchers.IO) {
+        repository.insert(alarm.value!!)
     }
 
     fun getName(): String{

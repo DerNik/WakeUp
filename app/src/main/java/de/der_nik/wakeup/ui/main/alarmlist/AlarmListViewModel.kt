@@ -32,7 +32,7 @@ class AlarmListViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         val wakeUpDao =WakeUpRoomDatabase.getDatabase(application).wakeUpDao()
         repository = WakeUpRepository(wakeUpDao)
-        allAlarms = repository.allAlarms
+        allAlarms = repository.getAlarms()
     }
 
     fun saveSingle(alarm: LiveData<AlarmTime>) = scope.launch(Dispatchers.IO) {

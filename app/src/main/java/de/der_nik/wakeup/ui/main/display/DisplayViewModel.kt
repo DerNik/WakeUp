@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.os.CountDownTimer
 import com.github.debop.javatimes.minus
+import de.der_nik.wakeup.R
 import de.der_nik.wakeup.WakeUpRepository
 import de.der_nik.wakeup.model.AlarmTime
 import de.der_nik.wakeup.persistence.WakeUpRoomDatabase
@@ -22,12 +23,12 @@ class DisplayViewModel(application: Application) : AndroidViewModel(application)
     init {
         val wakeUpDao = WakeUpRoomDatabase.getDatabase(application).wakeUpDao()
         repository = WakeUpRepository(wakeUpDao)
-        allAlarms = repository.allAlarms
+        allAlarms = repository.getAlarms()
     }
 
     fun startCountdown() {
-        if(allAlarms.value?.size ?: 0 > 0) {
-            countDown?.cancel()
+        countDown?.cancel()
+        if(allAlarms.value?.size ?: 0 > 0 && allAlarms.value?.get(0)?.active != false) {
             val date = allAlarms.value!!.get(0).date
             val now = Date().time
             val off = date - now
@@ -35,15 +36,20 @@ class DisplayViewModel(application: Application) : AndroidViewModel(application)
                 countDown = createCountdown(off)
                 countDown?.start()
             }
+        } else {
+            timeLeft.value =getApplication<Application>().getString(R.string.notSet)
         }
     }
 
     fun getAlarmTime(): String{
-        val date = Date(allAlarms.value?.get(0)?.date ?: 0)
-        val hour =  date.hours
-        val min = date.minutes
+        if(allAlarms.value?.size ?: 0 > 0 && allAlarms.value?.get(0)?.active != false){
+            val date = Date(allAlarms.value?.get(0)?.date ?: 0)
+            val hour =  date.hours
+            val min = date.minutes
 
-        return "$hour:$min"
+            return "$hour:$min"
+        }
+        return ""
     }
 
     fun createCountdown(off: Long) :CountDownTimer{
@@ -51,14 +57,17 @@ class DisplayViewModel(application: Application) : AndroidViewModel(application)
         return object: CountDownTimer(off, 1000) {
 
             override fun onTick(millisLeft: Long) {
-                val hoursLeft = millisLeft / 3600000
-                val minutesLeft =  (millisLeft % 3600000) / 60000 +1
-                timeLeft.value ="$hoursLeft:$minutesLeft"
+                val hoursLeft: Int = (millisLeft / 3600000).toInt()
+                val minutesLeft: Int =  ((millisLeft % 3600000) / 60000 +1).toInt()
+                timeLeft.value ="${hoursLeft.format(2)}:${minutesLeft.format(2)}"
             }
 
             override fun onFinish() {
                 this.cancel()
+                timeLeft.value =getApplication<Application>().getString(R.string.wakeUp)
             }
         }
     }
+
+    fun Int.format(digits: Int) = java.lang.String.format("%0${digits}d", this)
 }
