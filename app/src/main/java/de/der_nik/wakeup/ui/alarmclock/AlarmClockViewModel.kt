@@ -40,16 +40,25 @@ class AlarmClockViewModel (application: Application) : AndroidViewModel(applicat
         }
         val context = getApplication<Application>()
         AlarmClockManager.getInstance().stopAlarm(context)
-        if(AlarmClockManager.getInstance().deactivateAlarm(context,alarm)) {
+        if(AlarmClockManager.getInstance().deactivateAlarm(context,alarm.value!!)) {
             if(alarm.value!!.repetitive){
-                val date = Date(alarm.value!!.date)
-                alarm.value!!.date = AlarmClockManager.getInstance().setDate(date.hours, date.minutes, alarm.value!!)
-                AlarmClockManager.getInstance().activateAlarm(context,alarm)
+                AlarmClockManager.getInstance().setDate(alarm.value!!)
+                AlarmClockManager.getInstance().activateAlarm(context,alarm.value!!)
             }
             saveAlarm(alarm)
             return true
         }
         return false
+    }
+
+    fun snooze(): Boolean{
+        if(alarm.value == null) {
+            return false
+        }
+        val context = getApplication<Application>()
+        AlarmClockManager.getInstance().stopAlarm(context)
+        AlarmClockManager.getInstance().snooze(context, alarm.value!!, 1)
+        return true
     }
 
     private fun saveAlarm(alarm: LiveData<AlarmTime>) = scope.launch(Dispatchers.IO) {

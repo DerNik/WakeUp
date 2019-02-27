@@ -33,7 +33,7 @@ class EditAddAlarmViewModel(application: Application) : AndroidViewModel(applica
 
     fun createActivateAndSafeAlarm(hour: Int, minute: Int, mo: Boolean, di: Boolean,
                                    mi: Boolean, don: Boolean, fr: Boolean, sa: Boolean, so: Boolean, info: String): Boolean {
-        val newAlarm = AlarmTime(0, info, false)
+        val newAlarm = AlarmTime(0, info, false, hour, minute)
         newAlarm.mo = mo
         newAlarm.di = di
         newAlarm.mi = mi
@@ -42,7 +42,7 @@ class EditAddAlarmViewModel(application: Application) : AndroidViewModel(applica
         newAlarm.sa = sa
         newAlarm.so = so
 
-        val date = AlarmClockManager.getInstance().setDate(hour, minute, newAlarm)
+        val date = AlarmClockManager.getInstance().setDate(newAlarm)
 
         newAlarm.date = date
 
@@ -50,7 +50,7 @@ class EditAddAlarmViewModel(application: Application) : AndroidViewModel(applica
             newAlarm.id = this.id
         }
         alarmLD.setValue(newAlarm)
-        if (AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD)) {
+        if (AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD.value!!)) {
             save()
             return true
         }

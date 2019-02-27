@@ -17,50 +17,47 @@ class AlarmClockManager {
 
     private var ringtone: Ringtone? = null
 
-    fun activateAlarm(context: Context, alarm: LiveData<AlarmTime>): Boolean {
-        if(alarm.value == null) {
-            return false
-        }
-        val now = Date()
-        var dateToSet = Date(alarm.value!!.date)
-        if(dateToSet <= now){
-            var hour = dateToSet.hours
-            var min = dateToSet.minutes
-            alarm.value!!.date = setDate(hour, min, alarm.value!!)
-        }
+    fun activateAlarm(context: Context, alarm: AlarmTime): Boolean {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = getPendingIntent(context, alarm)
-        Log.d("AlarmDate", "Alarm aktiviert für: " + Date(alarm.value!!.date).toString())
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarm.value!!.date, pendingIntent)
-        alarm.value!!.active = true
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, setDate(alarm), pendingIntent)
+        alarm.active = true
         return true
     }
 
-    fun deactivateAlarm(context: Context, alarm: LiveData<AlarmTime>): Boolean {
-        if(alarm.value == null) {
-            return false
-        }
+    fun deactivateAlarm(context: Context, alarm: AlarmTime): Boolean {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = AlarmClockManager.getInstance().getPendingIntent(context, alarm)
         alarmManager.cancel(pendingIntent)
         pendingIntent.cancel()
-        alarm.value!!.active = false
+        alarm.active = false
         return true
     }
 
-    private fun getPendingIntent(context: Context, alarm: LiveData<AlarmTime>): PendingIntent {
+    fun snooze (context: Context, alarm: AlarmTime, offset: Int): Boolean{
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pendingIntent = getPendingIntent(context, alarm)
+        var time = Date().time + (60000 * offset)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent)
+        alarm.active = true
+        return true
+    }
+
+
+
+    private fun getPendingIntent(context: Context, alarm: AlarmTime): PendingIntent {
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        val id = alarm.value!!.id
+        val id = alarm.id
         alarmIntent.putExtra("id", id)
         return PendingIntent.getBroadcast(context, id, alarmIntent, 0)
     }
-    fun setDate(hour: Int, minute: Int, alarm: AlarmTime): Long {
+    fun setDate(alarm: AlarmTime): Long {
         val weekDays: List<Int> = getWeekList(alarm)
         val cal = Calendar.getInstance() // locale-specific
         cal.time = Date()
         val curTime = cal.timeInMillis
-        cal.set(Calendar.HOUR_OF_DAY, hour)
-        cal.set(Calendar.MINUTE, minute)
+        cal.set(Calendar.HOUR_OF_DAY, alarm.hour)
+        cal.set(Calendar.MINUTE, alarm.minute)
         cal.set(Calendar.SECOND, 0)
         cal.set(Calendar.MILLISECOND, 0)
         val timeToSet = cal.timeInMillis
@@ -70,7 +67,8 @@ class AlarmClockManager {
         while(weekDays.isNotEmpty() && !weekDays.contains(cal.get(Calendar.DAY_OF_WEEK))){
             cal.add(Calendar.DATE, 1)
         }
-        return cal.timeInMillis
+        alarm.date = cal.timeInMillis
+        return alarm.date
     }
 
     private fun getWeekList(alarm: AlarmTime): List<Int>{

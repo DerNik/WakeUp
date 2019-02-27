@@ -43,5 +43,11 @@ class AlarmClockFragment : Fragment() {
             viewModel.stopAlarm()
             activity?.finish()
         }
+
+        btn_snooze.setOnClickListener {
+            viewModel.snooze()
+        }
     }
+
+
 }

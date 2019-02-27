@@ -58,9 +58,9 @@ class AlarmListViewModel(application: Application) : AndroidViewModel(applicatio
             val alarmLD = MutableLiveData<AlarmTime>()
             alarmLD.value = alarm
             if(!alarmLD.value!!.active){
-                AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD)
+                AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD.value!!)
             } else {
-                AlarmClockManager.getInstance().deactivateAlarm(getApplication(), alarmLD)
+                AlarmClockManager.getInstance().deactivateAlarm(getApplication(), alarmLD.value!!)
             }
             saveSingle(alarmLD)
         }

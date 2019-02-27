@@ -9,7 +9,9 @@ import java.util.*
 data class AlarmTime(
     var date: Long,
     var name: String,
-    var active: Boolean) {
+    var active: Boolean,
+    var hour: Int,
+    var minute: Int) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     var repetitive = false
