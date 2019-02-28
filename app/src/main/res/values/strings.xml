@@ -6,4 +6,7 @@
     <string name="hint_word">Word...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
+
+    <string name="notSet">No Alarm set</string>
+    <string name="wakeUp">Wake UP!</string>
 </resources>

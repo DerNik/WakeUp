@@ -14,8 +14,8 @@ interface WakeUpDao {
     @Query("SELECT * FROM alarm_table")
     fun getAllAlarms(): LiveData<List<AlarmTime>>
 
-    @Query("SELECT * FROM alarm_table WHERE id LIKE :uuid")
-    fun getAlarmByID(uuid: String): AlarmTime
+    @Query("SELECT * FROM alarm_table WHERE id LIKE :id")
+    fun getAlarmByID(id: Int): AlarmTime
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(alarm: AlarmTime)

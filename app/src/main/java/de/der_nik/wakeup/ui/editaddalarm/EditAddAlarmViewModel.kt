@@ -17,13 +17,13 @@ import kotlin.coroutines.CoroutineContext
 class EditAddAlarmViewModel(application: Application) : AndroidViewModel(application) {
 
     val alarmLD: MutableLiveData<AlarmTime> by lazy { MutableLiveData<AlarmTime>() }
-    var uuid: String = ""
 
     private val repository: WakeUpRepository
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)
+    private var id = 0;
 
 
     init {
@@ -31,10 +31,26 @@ class EditAddAlarmViewModel(application: Application) : AndroidViewModel(applica
         repository = WakeUpRepository(wakeUpDao)
     }
 
-    fun createActivateAndSafeAlarm(setDate:  Long, info: String): Boolean {
-        val newAlarm = AlarmTime(uuid, setDate, info, false)
+    fun createActivateAndSafeAlarm(hour: Int, minute: Int, mo: Boolean, di: Boolean,
+                                   mi: Boolean, don: Boolean, fr: Boolean, sa: Boolean, so: Boolean, info: String): Boolean {
+        val newAlarm = AlarmTime(0, info, false, hour, minute)
+        newAlarm.mo = mo
+        newAlarm.di = di
+        newAlarm.mi = mi
+        newAlarm.don = don
+        newAlarm.fr = fr
+        newAlarm.sa = sa
+        newAlarm.so = so
+
+        val date = AlarmClockManager.getInstance().setDate(newAlarm)
+
+        newAlarm.date = date
+
+        if(this.id != 0) {
+            newAlarm.id = this.id
+        }
         alarmLD.setValue(newAlarm)
-        if (AlarmClockManager.getInstance().activateIntent(getApplication(), alarmLD)) {
+        if (AlarmClockManager.getInstance().activateAlarm(getApplication(), alarmLD.value!!)) {
             save()
             return true
         }
@@ -45,37 +61,19 @@ class EditAddAlarmViewModel(application: Application) : AndroidViewModel(applica
         repository.insert(alarmLD.value!!)
     }
 
-    fun handleReceivedUUID (uuid: String?)  {
-        if(!uuid.isNullOrEmpty()) {
-            this.uuid = uuid
-            loadAlarm(uuid)
-        } else {
-            this.uuid = UUID.randomUUID().toString()
+    fun handleReceivedID (id: Int)  {
+        if(id != 0) {
+            this.id = id;
+            loadAlarm(id)
         }
     }
 
-    fun setDate(hour: Int, minute: Int): Long {
-        val cal = Calendar.getInstance() // locale-specific
-        cal.time = Date()
-        val curTime = cal.timeInMillis
-        cal.set(Calendar.HOUR_OF_DAY, hour)
-        cal.set(Calendar.MINUTE, minute)
-        cal.set(Calendar.SECOND, 0)
-        cal.set(Calendar.MILLISECOND, 0)
-        val setTime = cal.timeInMillis
-        if (curTime > setTime){
-            cal.add(Calendar.DATE, 1)
-        }
-        return cal.timeInMillis
-    }
-
-    fun loadAlarm(uuid: String)  = scope.launch(Dispatchers.IO) {
-        alarmLD.postValue(repository.getAlarmByID(uuid))
+    fun loadAlarm(id: Int)  = scope.launch(Dispatchers.IO) {
+        alarmLD.postValue(repository.getAlarmByID(id))
     }
 
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
-        uuid = ""
     }
 }

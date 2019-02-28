@@ -2,16 +2,32 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".ui.alarmlist.MainActivity">
-    <android.support.design.widget.CoordinatorLayout android:layout_width="match_parent"
+        tools:context=".ui.main.MainActivity">
+    <FrameLayout android:layout_width="match_parent"
                                                      android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
 
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:elevation="4dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            <LinearLayout
+                    android:id="@+id/timer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"></LinearLayout>
+            <LinearLayout
+                    android:id="@+id/list"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+            android:layout_weight="1"></LinearLayout>
+        </LinearLayout>
 
-        <LinearLayout
-                android:id="@+id/container"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab"
@@ -21,6 +37,6 @@
                 android:layout_margin="@dimen/fab_margin"
                 android:src="@drawable/ic_add_black_24dp"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </FrameLayout>
 </layout>
 

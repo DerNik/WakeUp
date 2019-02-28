@@ -28,6 +28,19 @@
                     tools:layout_editor_absoluteY="246dp"
                     tools:layout_editor_absoluteX="0dp"/>
 
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+                <CheckBox android:id="@+id/day_of_week_mo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mo"/>
+                <CheckBox android:id="@+id/day_of_week_di" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Di"/>
+                <CheckBox android:id="@+id/day_of_week_mi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mi"/>
+                <CheckBox android:id="@+id/day_of_week_do" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Do"/>
+                <CheckBox android:id="@+id/day_of_week_fr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fr"/>
+                <CheckBox android:id="@+id/day_of_week_sa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sa"/>
+                <CheckBox android:id="@+id/day_of_week_so" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="So"/>
+            </LinearLayout>
+
+
             <TimePicker android:id="@+id/picker_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"></TimePicker>

@@ -7,7 +7,32 @@ import java.util.*
 
 @Entity(tableName = "alarm_table")
 data class AlarmTime(
-    @PrimaryKey val id: String,
     var date: Long,
     var name: String,
-    var active: Boolean)
+    var active: Boolean,
+    var hour: Int,
+    var minute: Int) {
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+
+    var repetitive = false
+        get() {
+        if(mo) return true
+        if(di) return true
+        if(mi) return true
+        if(don) return true
+        if(fr) return true
+        if(sa) return true
+        if(so) return true
+        return false
+    }
+
+    var mo: Boolean = false
+    var di: Boolean = false
+    var mi: Boolean = false
+    var don: Boolean = false
+    var fr: Boolean = false
+    var sa: Boolean = false
+    var so: Boolean = false
+
+
+}
