@@ -36,10 +36,13 @@ class AlarmListFragment : Fragment() {
 
         val context = requireContext()
         val recyclerView: RecyclerView = alarm_list_rv
-        val adapter = AlarmListAdapter(viewModel.AlarmListItemViewModel())
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
+        val adapter = AlarmListAdapter(AlarmListItemViewModel(viewModel.getApplication()))
+
 
         viewModel.allAlarms.observe(this, Observer { alarms -> alarms?.let { adapter.replaceItems(viewModel.allAlarms) } })
+
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
     }
 }

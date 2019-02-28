@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import de.der_nik.wakeup.model.AlarmTime
 import java.util.*
 
-class AlarmListAdapter internal constructor(val viewModel: AlarmListViewModel.AlarmListItemViewModel): RecyclerView.Adapter<AlarmListAdapter.AlarmViewHolder>() {
+class AlarmListAdapter internal constructor(val viewModel: AlarmListItemViewModel): RecyclerView.Adapter<AlarmListAdapter.AlarmViewHolder>() {
 
     private var items: LiveData<List<AlarmTime>>? = null
 

@@ -12,9 +12,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name=".ui.alarmclock.AlarmClockActivity"
-        android:launchMode="singleTop">
+        android:launchMode="singleTop"
+        android:parentActivityName=".ui.main.MainActivity">
         </activity>
-        <activity android:name=".ui.editaddalarm.EditAddAlarmActivity">
+        <activity android:name=".ui.editaddalarm.EditAddAlarmActivity"
+        android:parentActivityName=".ui.main.MainActivity">
         </activity>
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>

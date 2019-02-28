@@ -10,6 +10,9 @@ class EditAddAlarmActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_add_alarm_activity)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (savedInstanceState == null) {
             val id = intent.getIntExtra("id", 0)
             val editAddAlarmFragment = EditAddAlarmFragment.newInstance(id)
